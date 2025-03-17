@@ -1,0 +1,43 @@
+class Solution {
+    int max=Integer.MIN_VALUE;
+    public int longestCycle(int[] arr) {
+        List<List<Integer>>adj=new ArrayList<>();
+        int[] in=new int[arr.length];
+        for(int i=0;i<arr.length;i++){
+            adj.add(new ArrayList<>());
+        }
+        for(int i=0;i<arr.length;i++){
+            if(arr[i]!=-1){
+                in[arr[i]]++;
+                adj.get(i).add(arr[i]);
+            }
+        }
+        Set<Integer>set=new HashSet<>();
+        Map<Integer,Integer>map=new HashMap<>();
+        for(int i=0;i<arr.length;i++){
+            if(!set.contains(i) && in[i]!=0){
+                map=new HashMap<>();
+                path(i,adj,set,map,1);
+            }
+             if(max>set.size()){
+                return max;
+            }
+        }
+        return max==-2147483648?-1:max;
+    }
+    public void path(int id,List<List<Integer>>adj,Set<Integer>set,Map<Integer,Integer>map,int sum){
+        set.add(id);
+        map.put(id,sum);
+        for(int l:adj.get(id)){
+            if(map.containsKey(l)){
+                int t=Math.abs(map.get(id)-map.get(l))+1;
+                max=Math.max(max,t);
+                return;
+            }
+            else if(!set.contains(l)){
+                path(l,adj,set,map,sum+1);
+            }
+        }
+        map.remove(id);
+    }
+}
