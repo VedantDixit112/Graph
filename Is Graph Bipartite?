@@ -1,0 +1,49 @@
+class Solution {
+    public boolean isBipartite(int[][] arr) {
+        boolean []vis=new boolean[arr.length];
+        for(int i=0;i<arr.length;i++){
+            if(!vis[i]){
+                if(!path(arr,i,vis)){
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
+    public boolean path(int [][]arr,int p1,boolean []vis){
+        Queue<int []>q=new LinkedList<>();
+        int []l3=new int[2];
+        l3[0]=p1;
+        l3[1]=0;
+        q.add(l3);
+        int []col=new int[arr.length];
+        Arrays.fill(col,-1);
+        col[0]=0;
+        while(!q.isEmpty()){
+            int l1=q.size();
+            for(int i=0;i<l1;i++){
+                int []t=q.poll();
+                int id=t[0];
+                int cl=t[1];
+                vis[id]=true;
+                for(int j=0;j<arr[id].length;j++){
+                    int l=arr[id][j];
+                    if(!vis[l]){
+                        int c=cl==0?1:0;
+                        col[l]=c;
+                        int []p=new int[2];
+                        p[0]=l;
+                        p[1]=c;
+                        q.add(p);
+                    }
+                    else{
+                        if(cl==col[l]){
+                            return false;
+                        }
+                    }
+                }
+            }
+        }
+        return true;
+    }
+}
