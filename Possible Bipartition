@@ -1,0 +1,42 @@
+class Solution {
+    public boolean possibleBipartition(int n, int[][] arr) {
+        List<List<Integer>>adj=new ArrayList<>();
+        for(int i=0;i<=n;i++){
+            adj.add(new ArrayList<>());
+        }
+        for(int i=0;i<arr.length;i++){
+            int a=arr[i][0];
+            int b=arr[i][1];
+            adj.get(a).add(b);
+            adj.get(b).add(a);
+        }
+        boolean []vis=new boolean[n+1];
+        int []col=new int[n+1];
+        for(int i=1;i<=n;i++){
+            if(!vis[i]){
+                if(!path(i,vis,col,adj)){
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
+    public boolean path(int id,boolean []vis,int []col,List<List<Integer>>adj){
+        vis[id]=true;
+        for(int l:adj.get(id)){
+            if(!vis[l]){
+                int val=col[id]==0?1:0;
+                col[l]=val;
+                if(!path(l,vis,col,adj)){
+                    return false;
+                }
+            }
+            else{
+                if(col[id]==col[l]){
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
+}
