@@ -1,0 +1,39 @@
+class Solution {
+    public boolean canFinish(int n, int[][] arr) {
+        List<List<Integer>>adj=new ArrayList<>();
+        for(int i=0;i<n;i++){
+            adj.add(new ArrayList<>());
+        }
+        for(int i=0;i<arr.length;i++){
+            int val=arr[i][0];
+            int val1=arr[i][1];
+            adj.get(val).add(val1);
+        }
+        boolean []vis=new boolean[n];
+        for(int i=0;i<n;i++){
+            if(!vis[i]){
+                boolean []vis1=new boolean[n];
+                if(path(adj,i,vis1,vis)){
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
+    public boolean path(List<List<Integer>>adj,int id,boolean []vis1,boolean []vis){
+        vis[id]=true;
+        vis1[id]=true;
+        for(int l:adj.get(id)){
+            if(!vis[l]){
+                if(path(adj,l,vis1,vis)){
+                    return true;
+                }
+            }
+            if(vis1[l]){
+                return true;
+            }
+        }
+        vis1[id]=false;
+        return false;
+    }
+}
