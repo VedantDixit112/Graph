@@ -1,0 +1,47 @@
+class Solution {
+    TreeMap<Integer,Integer>map;
+    PriorityQueue<Character>pq;
+    Map<Integer,Character>map2;
+    public String smallestStringWithSwaps(String s, List<List<Integer>>ans) {
+        map=new TreeMap<>();
+        pq=new PriorityQueue<>();
+        map2=new HashMap<>();
+        List<List<Integer>>adj=new ArrayList<>();
+        for(int i=0;i<s.length();i++){
+            adj.add(new ArrayList<>());
+        }
+        for(int i=0;i<ans.size();i++){
+            int a=ans.get(i).get(0);
+            int b=ans.get(i).get(1);
+            adj.get(a).add(b);
+            adj.get(b).add(a);
+        }
+        boolean []vis=new boolean[s.length()];
+        for(int i=0;i<s.length();i++){
+            if(!vis[i]){
+                map=new TreeMap<>();
+                pq=new PriorityQueue<>();
+                path(s,adj,i,vis);
+                int t=0;
+                for(int l:map.keySet()){
+                    map2.put(l,pq.poll());
+                }
+            }
+        }
+        StringBuilder sb=new StringBuilder();
+        for(int i=0;i<s.length();i++){
+            sb.append(map2.get(i));
+        }
+        return sb.toString();
+    }
+    public void path(String s,List<List<Integer>>adj,int id,boolean []vis){
+        vis[id]=true;
+        map.put(id,0);
+        pq.add(s.charAt(id));
+        for(int l:adj.get(id)){
+            if(!vis[l]){
+                path(s,adj,l,vis);
+            }
+        }
+    }
+}
